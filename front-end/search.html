@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ntuaflix</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style2.css">
+</head>
+
+<body>
+    <header>
+        <a href="index.html" style="color: white; text-decoration: none;">
+            <div class="logo">Ntuaflix
+                <img src="movie.svg" alt="Description of image" width="50">
+            </div>
+        </a>
+
+        <form id="searchForm">
+            <input type="text" id="titleInput" name="titlePart" placeholder="Search...">
+            <button type="submit" class="search-button">Search</button>
+        </form>
+
+        <script>
+            document.getElementById("searchForm").addEventListener("submit", function (event) {
+                event.preventDefault();
+                const titlePart = document.getElementById("titleInput").value;
+                window.location.href = `search.html?titlePart=${encodeURIComponent(titlePart)}`;
+            });
+        </script>
+
+
+        <nav>
+            <a href="index.html" target="_self">Home</a>
+            <a href="movielists.html">Movies</a>
+
+            <a href="celebs.html">Celebrities</a>
+
+        </nav>
+        <div class="account">
+            <a href="#" id="btnLogIn">Sign In</a>
+            <a href="#" id="btnRegister">Register</a>
+            <a href="#" id="btnAccount" style="display: none;">My Account</a>
+            <a href="#" id="btnLogout" style="display: none;">Logout</a>
+        </div>
+    </header>
+
+    <!-- Sign In Modal -->
+    <div id="signinModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <!-- Sign In Form Here -->
+
+            <h2>Sign In</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username">Username or Email:</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div id="login-message" style="color:gold;"></div>
+                <div class="form-group">
+                    <button type="submit">Sign In</button>
+                </div>
+            </form>
+            <p>Don't have an account? <a href="index.html">Register</a></p>
+
+        </div>
+    </div>
+
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <!-- Register Form Here -->
+
+            <h2>Register</h2>
+            <form id="registration-form">
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="reg-username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="reg-password" name="password" required>
+                </div>
+                <div id="registration-message"></div>
+                <div class="form-group">
+                    <button type="submit">Register</button>
+                </div>
+            </form>
+
+            <p>Already have an account? <a href="index.html">Sign in</a></p>
+
+        </div>
+    </div>
+
+    <script>
+        // Get the modal
+        var modalSignIn = document.getElementById("signinModal");
+        var modalRegister = document.getElementById("registerModal");
+
+        // Get the button that opens the modal
+        var btnSignIn = document.getElementById("btnLogIn");
+        var btnRegister = document.getElementById("btnRegister");
+
+        // Get the <span> element that closes the modal
+        var spanCloseSignIn = modalSignIn.getElementsByClassName("close")[0];
+        var spanCloseRegister = modalRegister.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        btnSignIn.onclick = function () {
+            modalSignIn.style.display = "block";
+        }
+        btnRegister.onclick = function () {
+            modalRegister.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        spanCloseSignIn.onclick = function () {
+            modalSignIn.style.display = "none";
+        }
+        spanCloseRegister.onclick = function () {
+            modalRegister.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+
+    </script>
+    <main>
+        <!-- Top 250 Movies Title -->
+
+
+        <h1 style="color: gold">Search Results for title</h1>
+        <div id="results" style="color: gold;"></div>
+        <h1 style="color: gold">Search Results for celebrities</h1>
+        <div id="nameResults" style="color: gold;"></div>
+
+        <script src="search.js"></script>
+
+
+
+
+    </main>
+
+
+    <footer>
+        <p>About Ntuaflix</p>
+
+    </footer>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const loginMessage = document.getElementById('login-message');
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            fetch('https://localhost:9876/ntuaflix_api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Login failed');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.token === "foo") {
+                        // Close the modal
+                        document.getElementById('signinModal').style.display = 'none';
+
+                        // Change header appearance
+                        document.getElementById('btnLogIn').style.display = 'none'; // Hide login
+                        document.getElementById('btnRegister').style.display = 'none'; // Hide register
+                        document.getElementById('btnAccount').style.display = 'block'; // Show my account
+                        document.getElementById('btnLogout').style.display = 'block'; // Show logout
+
+                        // Store the token in localStorage
+                        localStorage.setItem('token', 'foo');
+                    } else {
+                        loginMessage.textContent = 'Invalid token received.';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error during login:', error);
+                    loginMessage.textContent = 'Login failed.';
+                });
+        });
+
+        // Logout functionality
+        document.getElementById('btnLogout').addEventListener('click', function () {
+            // Remove the token from localStorage
+            localStorage.removeItem('token');
+
+            // Reset the header
+            document.getElementById('btnLogIn').style.display = 'block';
+            document.getElementById('btnRegister').style.display = 'block';
+            document.getElementById('btnAccount').style.display = 'none';
+            document.getElementById('btnLogout').style.display = 'none';
+        });
+    </script>
+    <script>window.addEventListener('load', function () {
+            const token = localStorage.getItem('token');
+            if (token === 'foo') {
+                // User is logged in
+                document.getElementById('btnLogIn').style.display = 'none';
+                document.getElementById('btnRegister').style.display = 'none';
+                document.getElementById('btnAccount').style.display = 'block';
+                document.getElementById('btnLogout').style.display = 'block';
+            } else {
+                // User is not logged in
+                document.getElementById('btnLogIn').style.display = 'block';
+                document.getElementById('btnRegister').style.display = 'block';
+                document.getElementById('btnAccount').style.display = 'none';
+                document.getElementById('btnLogout').style.display = 'none';
+            }
+        });</script>
+    <script>
+        document.getElementById('registration-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const registrationMessage = document.getElementById('registration-message');
+            const username = document.getElementById('reg-username').value;
+            const password = document.getElementById('reg-password').value;
+
+            // First, try to login to check if the user exists
+            fetch('https://localhost:9876/ntuaflix_api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // If login is successful, user exists
+                        throw new Error('User already exists');
+                    } else {
+                        // If login fails, user does not exist, proceed to register
+                        return fetch(`https://localhost:9876/ntuaflix_api/admin/usermod/${username}/${password}`, {
+                            method: 'POST'
+                        });
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Registration failed');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    registrationMessage.textContent = data.message;
+                    registrationMessage.style.color = 'green';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    registrationMessage.textContent = error.message;
+                    registrationMessage.style.color = 'red';
+                });
+        });
+    </script>
+
+</body>
+
+</html>

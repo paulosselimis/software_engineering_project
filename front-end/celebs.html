@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ntuaflix</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+    <header>
+        <a href="index.html" style="color: white; text-decoration: none;">
+            <div class="logo">Ntuaflix
+                <img src="movie.svg" alt="Description of image" width="50">
+            </div>
+        </a>
+
+        <form id="searchForm">
+            <input type="text" id="titleInput" name="titlePart" placeholder="Search...">
+            <button type="submit" class="search-button">Search</button>
+        </form>
+
+        <script>
+            document.getElementById("searchForm").addEventListener("submit", function (event) {
+                event.preventDefault();
+                const titlePart = document.getElementById("titleInput").value;
+                window.location.href = `search.html?titlePart=${encodeURIComponent(titlePart)}`;
+            });
+        </script>
+
+
+        <nav>
+            <a href="index.html" target="_self">Home</a>
+            <a href="movielists.html">Movies</a>
+
+            <a href="celebs.html">Celebrities</a>
+
+        </nav>
+        <div class="account">
+            <a href="#" id="btnLogIn">Sign In</a>
+            <a href="#" id="btnRegister">Register</a>
+            <a href="#" id="btnAccount" style="display: none;">My Account</a>
+            <a href="#" id="btnLogout" style="display: none;">Logout</a>
+        </div>
+    </header>
+
+
+
+
+    <!-- Sign In Modal -->
+    <div id="signinModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <!-- Sign In Form Here -->
+
+            <h2>Sign In</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username">Username or Email:</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div id="login-message" style="color:gold;"></div>
+                <div class="form-group">
+                    <button type="submit">Sign In</button>
+                </div>
+            </form>
+            <p>Don't have an account? <a href="index.html">Register</a></p>
+
+        </div>
+    </div>
+
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <!-- Register Form Here -->
+
+            <h2>Register</h2>
+            <form id="registration-form">
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="reg-username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="reg-password" name="password" required>
+                </div>
+                <div id="registration-message"></div>
+                <div class="form-group">
+                    <button type="submit">Register</button>
+                </div>
+            </form>
+
+            <p>Already have an account? <a href="index.html">Sign in</a></p>
+
+        </div>
+    </div>
+
+    <script>
+        // Get the modal
+        var modalSignIn = document.getElementById("signinModal");
+        var modalRegister = document.getElementById("registerModal");
+
+        // Get the button that opens the modal
+        var btnSignIn = document.getElementById("btnLogIn");
+        var btnRegister = document.getElementById("btnRegister");
+
+        // Get the <span> element that closes the modal
+        var spanCloseSignIn = modalSignIn.getElementsByClassName("close")[0];
+        var spanCloseRegister = modalRegister.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        btnSignIn.onclick = function () {
+            modalSignIn.style.display = "block";
+        }
+        btnRegister.onclick = function () {
+            modalRegister.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        spanCloseSignIn.onclick = function () {
+            modalSignIn.style.display = "none";
+        }
+        spanCloseRegister.onclick = function () {
+            modalRegister.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+
+    </script>
+
+    <main>
+
+        <h2 style="color: gold; text-align: center;">All Celebrities By Letter</h2>
+        <div id="letter-selector">
+            <span class="letter" data-letter="A">A</span>
+            <span class="letter" data-letter="B">B</span>
+            <span class="letter" data-letter="C">C</span>
+            <span class="letter" data-letter="D">D</span>
+            <span class="letter" data-letter="E">E</span>
+            <span class="letter" data-letter="F">F</span>
+            <span class="letter" data-letter="G">G</span>
+            <span class="letter" data-letter="H">H</span>
+            <span class="letter" data-letter="I">I</span>
+            <span class="letter" data-letter="J">J</span>
+            <span class="letter" data-letter="K">K</span>
+            <span class="letter" data-letter="L">L</span>
+            <span class="letter" data-letter="M">M</span>
+            <span class="letter" data-letter="N">N</span>
+            <span class="letter" data-letter="O">O</span>
+            <span class="letter" data-letter="P">P</span>
+            <span class="letter" data-letter="Q">Q</span>
+            <span class="letter" data-letter="R">R</span>
+            <span class="letter" data-letter="S">S</span>
+            <span class="letter" data-letter="T">T</span>
+            <span class="letter" data-letter="U">U</span>
+            <span class="letter" data-letter="V">V</span>
+            <span class="letter" data-letter="W">W</span>
+            <span class="letter" data-letter="X">X</span>
+            <span class="letter" data-letter="Y">Y</span>
+            <span class="letter" data-letter="Z">Z</span>
+        </div>
+
+    </main>
+    <div id="celebrity-container" style="color:gold;"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const letterSelector = document.getElementById('letter-selector');
+            letterSelector.addEventListener('click', function (event) {
+                if (event.target.classList.contains('letter')) {
+                    const selectedLetter = event.target.getAttribute('data-letter');
+                    fetchCelebritiesByLetter(selectedLetter);
+                }
+            });
+
+            function fetchCelebritiesByLetter(letter) {
+                const container = document.getElementById('celebrity-container');
+                container.innerHTML = ''; // Clear existing content
+                fetch(`https://localhost:9876/ntuaflix_api/nconst/${letter}`) // Adjusted endpoint
+                    .then(response => response.json())
+                    .then(nconstList => {
+                        const detailsPromises = nconstList.map(nconst => fetchCelebrityDetails(nconst));
+                        Promise.all(detailsPromises)
+                            .then(allDetails => {
+                                allDetails.sort((a, b) => a.name.localeCompare(b.name))
+                                    .forEach(celebrity => displayCelebrity(celebrity));
+                            });
+                    })
+                    .catch(error => console.error('Error fetching celebrities by letter:', error));
+            }
+
+            function fetchCelebrityDetails(nameID) {
+                return fetch(`https://localhost:9876/ntuaflix_api/name/${nameID}`) // Replace PORT
+                    .then(response => response.json())
+                    .catch(error => console.error('Error fetching celebrity details:', error));
+            }
+
+            function displayCelebrity(celebrity) {
+                const container = document.getElementById('celebrity-container'); // Replace with your container ID
+                const celebElement = document.createElement('div');
+                let imageUrl = 'https://via.placeholder.com/200x300?text=No+Image'; // Default placeholder image
+                if (celebrity.namePoster && celebrity.namePoster.includes('{width_variable}')) {
+                    const imageWidth = 'w200'; // Set desired width
+                    imageUrl = celebrity.namePoster.replace('{width_variable}', imageWidth);
+                }
+                celebElement.classList.add('celebrity');
+                celebElement.innerHTML = `
+        <a href="celebsview.html?nameID=${celebrity.nameID}" style="text-decoration: none; color: gold;">
+        <h3>${celebrity.name}</h3> <!-- Updated primaryName to name -->
+        <img src="${imageUrl}" alt="${celebrity.name}"> <!-- Updated primaryName to name -->
+        <p>Born: ${celebrity.birthYr || 'N/A'}</p> <!-- Updated birthYear to birthYr -->
+        <p>Died: ${celebrity.deathYr || 'N/A'}</p> <!-- Updated deathYear to deathYr -->
+        <p>Known for: ${celebrity.nameTitles.map(title => title.titleID).join(', ')}</p></a>
+    `;
+                container.appendChild(celebElement);
+            }
+        });
+    </script>
+
+
+    <footer>
+        <p>About Ntuaflix</p>
+
+    </footer>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const loginMessage = document.getElementById('login-message');
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            fetch('https://localhost:9876/ntuaflix_api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Login failed');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.token === "foo") {
+                        // Close the modal
+                        document.getElementById('signinModal').style.display = 'none';
+
+                        // Change header appearance
+                        document.getElementById('btnLogIn').style.display = 'none'; // Hide login
+                        document.getElementById('btnRegister').style.display = 'none'; // Hide register
+                        document.getElementById('btnAccount').style.display = 'block'; // Show my account
+                        document.getElementById('btnLogout').style.display = 'block'; // Show logout
+
+                        // Store the token in localStorage
+                        localStorage.setItem('token', 'foo');
+                    } else {
+                        loginMessage.textContent = 'Invalid token received.';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error during login:', error);
+                    loginMessage.textContent = 'Login failed.';
+                });
+        });
+
+        // Logout functionality
+        document.getElementById('btnLogout').addEventListener('click', function () {
+            // Remove the token from localStorage
+            localStorage.removeItem('token');
+
+            // Reset the header
+            document.getElementById('btnLogIn').style.display = 'block';
+            document.getElementById('btnRegister').style.display = 'block';
+            document.getElementById('btnAccount').style.display = 'none';
+            document.getElementById('btnLogout').style.display = 'none';
+        });
+    </script>
+    <script>window.addEventListener('load', function () {
+            const token = localStorage.getItem('token');
+            if (token === 'foo') {
+                // User is logged in
+                document.getElementById('btnLogIn').style.display = 'none';
+                document.getElementById('btnRegister').style.display = 'none';
+                document.getElementById('btnAccount').style.display = 'block';
+                document.getElementById('btnLogout').style.display = 'block';
+            } else {
+                // User is not logged in
+                document.getElementById('btnLogIn').style.display = 'block';
+                document.getElementById('btnRegister').style.display = 'block';
+                document.getElementById('btnAccount').style.display = 'none';
+                document.getElementById('btnLogout').style.display = 'none';
+            }
+        });</script>
+
+</body>
+
+</html>
